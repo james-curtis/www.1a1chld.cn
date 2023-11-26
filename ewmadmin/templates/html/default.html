@@ -1,0 +1,92 @@
+<!--This is IE DTD patch , Don't delete this line.-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.3)" />
+<meta http-equiv="Page-Exit" content="blendTrans(Duration=0.3)" />
+<title><?php echo $cfg_webname; ?></title>
+<link href="templates/style/frame.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="templates/js/jquery.min.js"></script>
+<script type="text/javascript" src="templates/js/frame.js"></script>
+<script type="text/javascript">
+<?php
+
+$fdir  = PHPMYWIND_DATA.'/cache/auth/';
+$fname = 'auth_'.$cfg_auth_key.'.php';
+
+
+
+if(file_exists($fdir.$fname))
+{
+	echo 'url = "'.$_SERVER['HTTP_HOST'].'";';
+
+
+	//获取缓存时间
+	$fMkTime = filemtime($fdir.$fname);
+
+
+	//检测缓存最后更新时间
+	if($fMkTime + 21600 < time())
+	{
+		echo 'GetAuth();';
+	}
+	else
+	{
+		//开始验证
+		$jsonStr = json_decode(stripslashes(Readf($fdir.$fname)));
+
+		if($jsonStr->doname != $_SERVER['HTTP_HOST'])
+			echo 'GetAuth();';
+		else if($jsonStr->status == 'OK')
+			echo '$(function(){$(".authUser").show();})';
+		else
+			echo '$(function(){$(".authUser").hide();})';
+	}
+}
+else
+{
+	echo 'url = "'.$_SERVER['HTTP_HOST'].'";';
+	echo 'GetAuth();';
+}
+
+?>
+</script>
+</head>
+<body>
+<div class="header">
+	<a href="javascript:;" id="logo" class="logo"></a>
+	<div class="user">
+		<span class="name"><?php echo $_SESSION['admin']; ?></span>
+		<div class="userPanel">
+			<a href="javascript:;" class="arrow"></a>
+			<div class="panel">
+				<div class="warp">
+					<div class="info">
+						<div><strong>本次登录</strong><br /><?php echo MyDate('Y-m-d H:i',$_SESSION['logintime']); ?></div>
+					</div>
+					<div class="actbtn"><a href="admin_update.php?id=<?php $row = $dosql->GetOne("SELECT `id` FROM `#@__ewmadmin` WHERE adminname='".$_SESSION['admin']."'");echo $row['id'];?>" class="edit" target="main">修改密码</a><a href="logout.php" class="logout">退出系统</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="fun">
+		<div class="siteList">
+		</div>
+		<a href="admin.php" target="main" class="homeLink df" title="系统首页">系统首页</a>
+		<a href="logout.php" class="lockScreen df" title="退出登录">退出登录</a>
+	</div>
+</div>
+<div class="left">
+	<div class="menu">
+		<iframe name="menu" id="menu" frameborder="0" src="left_menu.php" scrolling="no"></iframe>
+	</div>
+</div>
+<div class="right">
+	<div class="main">
+		<iframe name="main" id="main" frameborder="0" src="admin.php" <?php if(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')) echo 'scrolling="yes"'; ?>></iframe>
+	</div>
+</div>
+
+</body>
+</html>

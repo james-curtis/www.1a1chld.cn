@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="target-densitydpi=medium-dpi,  initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>文件上传7</title>
+<script src="js/jquery-1.9.2.min.js?2"></script>
+<script src="js/hcfile.config-0.3.js?12"></script>
+<script src="js/hcfile-0.3.js?35"></script>
+
+<script src="js/exif.js?19"></script>
+<link href="js/hcfile03.css" rel="stylesheet" type="text/css">
+<style>
+*{ font-family:"微软雅黑";}
+.hcfile-h3{border-bottom:dashed 1px #CCCCCC; line-height:40px;}
+</style>
+</head>
+<body>
+<table>
+<tr ><td valign="middle"></td></tr>
+</table>
+<div style="width:800px; margin-left:auto; margin-right:auto;border:solid 0px #CCCCCC; padding:10px; overflow:hidden; height:auto;">
+   
+   <div class="line" >
+		<h3 class="hcfile-h3">样式3：文件批量上传,浏览器支持多选就可以多选,可设置上传个数</h3>
+		<p><textarea  id="photos2" style="width:600px; font-size:12px;"></textarea></p>
+		<span id="photos2_panel" style="height:auto; width:auto; display:inline-block; overflow:visible; float:left"></span><span id="photos2_weizhi" style=" text-align:center; border:dashed 1px #CCCCCC; background-color:#FFFFFF; height:50px; width:50px; color:#CCCCCC; line-height:50px; text-align:center; display:inline-block; margin-right:10px; font-size:30px; font-family:Arial, Helvetica, sans-serif;">+</span>
+		<span  id="photos2_num" style="line-height:50px; font-size:20px;">0/50</span>
+		<div style="height:0px; clear:both;"></div>
+   </div>
+   <div class="line">
+	   <h3 class="hcfile-h3">样式1：文件批量上传,浏览器支持多选就可以多选,可设置上传个数,并按;隔开</h3>
+	   <p><textarea  id="photos" style="width:600px; font-size:12px;">/file/p/s50/20180519/image20180519231742sj7348.jpeg</textarea></p>
+	   <div id="photos_weizhi" style=" text-align:center; background-color:#3399FF; height:50px; width:100px; color:#fff; line-height:50px; text-align:center; float:left; margin-right:10px;">上传图片</div>
+	   <div id="photos_panel" style="height:auto; width:auto; float:left; overflow:hidden;"></div>
+	   <span  id="photos_num" style="line-height:50px; font-size:20px;"></span>
+	</div>
+	   
+   <div class="line" >
+		<h3 class="hcfile-h3">样式2：文件批量上传,浏览器支持多选就可以多选,可设置上传个数</h3>
+		<p><textarea  id="photos1" style="width:600px; font-size:12px;"></textarea></p>
+		<div style="margin-bottom:10px; overflow:hidden; height:auto;"><div id="photos1_weizhi" style=" text-align:center; background-color:#3399FF; height:50px; width:120px; color:#fff; line-height:50px; text-align:center; float:left; margin-right:10px;">上传图片</div><span  id="photos1_num" style="line-height:50px; font-size:20px; float:left;">0/50个</span></div>
+		<div id="photos1_panel" style="height:auto; width:100%; float:left; overflow:hidden;"></div>
+   </div>
+      <div class="line">
+	   <h3 class="hcfile-h3">样式4：封面</h3>
+	   <p><input type="text" value="upload/image/20170821/image20170821231443_7215.jpeg" id="photo4" style="width:600px;"/></p>
+	   <p><textarea  id="photos4" style="width:600px; font-size:12px;">upload/image/20170821/image20170821231428_4376.jpeg#upload/image/20170821/image20170821231443_7215.jpeg</textarea></p>
+	   <div id="photos4_panel" style="height:auto; width:100%; float:left;"></div>
+	   <span  id="photos4_num" style="line-height:50px; font-size:20px;"></span>
+	   <div id="photos4_weizhi" style=" text-align:center; background-color:#3399FF; height:50px; width:100px; color:#fff; line-height:50px; text-align:center; float:left; margin-right:10px;">上传图片</div>
+	</div>
+	
+      <div class="line">
+	   <h3 class="hcfile-h3">样式5</h3>
+	   <p><input type="text" value="upload/image/20170821/image20170821231443_7215.jpeg" id="photo5" style="width:600px;"/></p>
+	   <p><textarea  id="photos5" style="width:600px; font-size:12px;">upload/image/20170821/image20170821231428_4376.jpeg#upload/image/20170821/image20170821231443_7215.jpeg</textarea></p>
+	   <div id="photos5_weizhi" class="upload-bt"><div class='jian'>+</div><div class='text'>请选择或拖拽上传文件、限制每个20.0MB以内。</div></div>
+	   <div id="photos5_panel" style="height:auto; width:100%; float:left;"></div>
+	</div>
+</div>
+
+</div>
+<script>
+		//g_siteurl_file="../"; //配置图片所在的站点网址，重点，这个最好改一下 显示图片所在的网址 如http://www.hao123.com/file/1.jpg ,则是http://www.hao123.com/
+		//g_ico_path="images/";   //重点配置默认显示图标所在的文件夹  如http://www.hao123.com/uploadhtml5e/images/doc.jpg ,则是http://www.hao123.com/uploadhtml5e/images/
+		try{
+		  hcfile().Init({
+				  url:"include/php/ajax.php?act=up",
+				  maxnum:50,//只能上传N张
+				  type:"img",//yinpin:仅上传音频文件,shipin:仅上传视频文件,img:仅上传图片,不填或all表示全部
+				  input_id:"photos2",//存多张图片路径的input的id
+				  weizhi_id:"photos2_weizhi",//选择按钮位置对像id
+				  panel_id:"photos2_panel",//图片文件显示对象id
+				  input_fengmian_id:'',//存封面的图片路径input对象id
+				  isnewsmall:1,//1为生成小图
+				  img_fdsize:1024*50,//每段图片的大小，最好不要超过1M
+				  ischongxuan:0,//1显示重选按钮
+				   maxsize:1024*100, //限制大小
+				   isdelfile:1,
+				  drop_to_id:"document",//托入有效区域对象id,如填写成document则将整个网页做为有效区域
+				  send_id:"send",//确定上传按钮位置对像id,不填写或填写auto则自动上传
+				  item_class:"myitem_smalla", //样式 可以不填写，不填写为显示图片
+				  down_url:"include/php/down.php",//可以不填写，下载的
+				  wenzi:{baifenbi:"等待",see:"O",del:"×",chongchuan_e:"失败"},
+				  //yasuo:{type:"width",width:1000,zhiliang:0.9},//按宽压缩
+				  init_show:{date:0,size:0,name:0,bar:0,baifenbi:1,del:0,bg:1},
+				  upload_show:{date:0,size:0,name:0,bar:0,baifenbi:1,del:0,bg:1},//上传过程中要显示的元素,1:显示,0不显示 date(日期) size(大小) name(标题) bar(进度条) baifenbi(进度条) del(删除按钮)
+				  success_show:{date:0,size:0,name:0,bar:0,baifenbi:0,del:1,bg:0,see:0},//上传完后要显示的元素,1:显示,0不显
+				  error_show:{del:1,baifenbi:1,bg:1},
+				  success:function(op){
+				      var obj=document.getElementById(this.input_id+"_num");
+					  if(obj){
+					     obj.innerHTML=""+op.num+"/"+op.maxnum;
+					  }
+				  },img_click:function(op){
+				       console.log(op);
+					   alert(op.item1.getAttribute("data-src"));
+				  },del_huidiao:function(op){
+				       var obj=document.getElementById(this.input_id+"_num");
+					   if(obj){
+					      obj.innerHTML=""+op.num+"/"+op.maxnum;
+					  }
+				  },error:function(myitem){
+				   
+				  }
+		 });
+		 }catch(err){
+		  alert(err.message);
+		 }
+		  hcfile().Init({
+				  url:"include/php/ajax.php?act=up",
+				  maxnum:10,//只能上传N张
+				  type:"img",//yinpin:仅上传音频文件,shipin:仅上传视频文件,img:仅上传图片,不填或all表示全部
+				  input_id:"photos",//存多张图片路径的input的id
+				  weizhi_id:"photos_weizhi",//选择按钮位置对像id
+				  panel_id:"photos_panel",//图片文件显示对象id
+				  input_fengmian_id:'',//存封面的图片路径input对象id
+				  bgsrc:"",//按钮图片
+				  isnewsmall:1,//1为生成小图
+				 
+				  img_fdsize:1024*10,//每段图片的大小，最好不要超过1M
+				  ischongxuan:0,//1显示重选按钮
+				  fenge:";",
+				  drop_to_id:"drop_div",//托入有效区域对象id,如填写成document则将整个网页做为有效区域
+				  send_id:"send",//确定上传按钮位置对像id,不填写或填写auto则自动上传
+				  item_class:"myitem_small", //样式 可以不填写，不填写为显示图片
+				  select_num_id:"select_num", //可以不填写，显示当前要上传的文件个数的对象id
+				  success_num_id:"success_num", //可以不填写，显示当前要已上传的文件总个数的对象id
+				  max_num_id:"max_num", //可以不填写，显示允许上传的个数
+				  down_url:"include/php/down.php",//可以不填写，下载的
+				  bt_del_text:"删除",
+				  init_show:{date:0,size:0,name:1,bar:0,baifenbi:0,del:0,bg:0},
+				  upload_show:{date:0,size:0,name:0,bar:1,baifenbi:1,del:0,bg:1},//上传过程中要显示的元素,1:显示,0不显示 date(日期) size(大小) name(标题) bar(进度条) baifenbi(进度条) del(删除按钮)
+				  success_show:{date:0,size:0,name:1,bar:0,baifenbi:0,del:1,bg:0,see:1},//上传完后要显示的元素,1:显示,0不显
+				  success:function(op){
+				      var obj=document.getElementById(this.input_id+"_num");
+					  if(obj){
+					     obj.innerHTML=""+op.num+"/"+op.maxnum;
+					  }
+				  },del_huidiao:function(op){
+				       var obj=document.getElementById(this.input_id+"_num");
+					   if(obj){
+					      obj.innerHTML=""+op.num+"/"+op.maxnum;
+					  }
+				  }
+		 });
+		  hcfile().Init({
+				  url:"include/php/ajax.php?act=up",
+				  maxnum:50,//只能上传N张
+				  type:"img",//yinpin:仅上传音频文件,shipin:仅上传视频文件,img:仅上传图片,不填或all表示全部
+				  input_id:"photos1",//存多张图片路径的input的id
+				  weizhi_id:"photos1_weizhi",//选择按钮位置对像id
+				  panel_id:"photos1_panel",//图片文件显示对象id
+				  input_fengmian_id:'',//存封面的图片路径input对象id
+				  bgsrc:"",//按钮图片
+				  isnewsmall:1,//1为生成小图
+				  img_fdsize:1024*10,//每段图片的大小，最好不要超过1M
+				  ischongxuan:0,//1显示重选按钮
+				  drop_to_id:"document",//托入有效区域对象id,如填写成document则将整个网页做为有效区域
+				  send_id:"send",//确定上传按钮位置对像id,不填写或填写auto则自动上传
+				  item_class:"myitembar", //样式 可以不填写，不填写为显示图片
+				  select_num_id:"select_num", //可以不填写，显示当前要上传的文件个数的对象id
+				  success_num_id:"success_num", //可以不填写，显示当前要已上传的文件总个数的对象id
+				  max_num_id:"max_num", //可以不填写，显示允许上传的个数
+				  down_url:"include/php/down.php",//可以不填写，下载的
+				  bt_del_text:"删除",
+				  wenzi:{baifenbi:"等待"},
+				  init_show:{date:0,size:0,name:1,bar:1,baifenbi:1,del:0,bg:0},
+				  upload_show:{date:0,size:0,name:1,bar:1,baifenbi:1,del:0,bg:1},//上传过程中要显示的元素,1:显示,0不显示 date(日期) size(大小) name(标题) bar(进度条) baifenbi(进度条) del(删除按钮)
+				  success_show:{date:0,size:0,name:1,bar:1,baifenbi:1,del:1,bg:0,see:1},//上传完后要显示的元素,1:显示,0不显
+				  success:function(op){
+				      var obj=document.getElementById(this.input_id+"_num");
+					  if(obj){
+					     obj.innerHTML=""+op.num+"/"+op.maxnum;
+					  }
+				  },del_huidiao:function(op){
+				       var obj=document.getElementById(this.input_id+"_num");
+					   if(obj){
+					      obj.innerHTML=""+op.num+"/"+op.maxnum;
+					  }
+				  }
+		 });
+
+		//g_siteurl_file="../"; //配置图片所在的站点网址，重点，这个最好改一下 显示图片所在的网址 如http://www.hao123.com/file/1.jpg ,则是http://www.hao123.com/
+		//g_ico_path="images/";   //重点配置默认显示图标所在的文件夹  如http://www.hao123.com/uploadhtml5e/images/doc.jpg ,则是http://www.hao123.com/uploadhtml5e/images/
+		  var hcfile1=hcfile().Init({
+				  url:"include/php/ajax.php?act=up",
+				  maxnum:10,//只能上传N张
+				  type:"img",//yinpin:仅上传音频文件,shipin:仅上传视频文件,img:仅上传图片,不填或all表示全部
+				  input_id:"photos4",//存多张图片路径的input的id
+				  weizhi_id:"photos4_weizhi",//选择按钮位置对像id
+				  panel_id:"photos4_panel",//图片文件显示对象id
+				  input_fengmian_id:'photo4',//存封面的图片路径input对象id
+				  bgsrc:"",//按钮图片
+				  isnewsmall:1,//1为生成小图
+				  img_fdsize:1024*10,//每段图片的大小，最好不要超过1M
+				  ischongxuan:0,//1显示重选按钮
+				  drop_to_id:"drop_div",//托入有效区域对象id,如填写成document则将整个网页做为有效区域
+				  send_id:"send",//确定上传按钮位置对像id,不填写或填写auto则自动上传
+				  item_class:"myitem_smalla1", //样式 可以不填写，不填写为显示图片
+				  select_num_id:"select_num", //可以不填写，显示当前要上传的文件个数的对象id
+				  success_num_id:"success_num", //可以不填写，显示当前要已上传的文件总个数的对象id
+				  max_num_id:"max_num", //可以不填写，显示允许上传的个数
+				  down_url:"include/php/down.php",//可以不填写，下载的
+                  wenzi:{fengmian:"设为封面"},
+				  init_show:{date:0,size:0,img:0,name:0,bar:0,baifenbi:0,del:0,bg:0,fengmian:0,see:0,chongchuan:0,chongxuan:0,canvas:0,prev:0,next:0,filesize:0},//初始过程要显示的元素
+				  upload_show:{date:0,size:0,name:0,bar:1,baifenbi:1,del:0,bg:1},//上传过程中要显示的元素,1:显示,0不显示 date(日期) size(大小) name(标题) bar(进度条) baifenbi(进度条) del(删除按钮)
+				  success_show:{date:0,size:0,name:0,bar:0,baifenbi:0,del:1,bg:0,see:0,fengmian:1},//上传完后要显示的元素,1:显示,0不显
+				  success:function(op){
+				      var obj=document.getElementById(this.input_id+"_num");
+					  if(obj){
+					    if(op.num>0){obj.innerHTML=" "+op.num+"/"+op.maxnum;}else{ obj.innerHTML="";}
+					  }
+				  },del_huidiao:function(op){
+				      var obj=document.getElementById(this.input_id+"_num");
+					  if(obj){
+					    if(op.num>0){obj.innerHTML=" "+op.num+"/"+op.maxnum;}else{ obj.innerHTML="";}
+					  }
+				  }
+		 });
+		 
+		 
+		  hcfile().Init({
+				   url:"include/php/ajax.php?act=up",
+				 // width:300,//项或按钮宽度
+				  //height:300,//项或按钮高度
+				  maxnum:5,//只能上传N张
+				  isnewsmall:0,
+				  isdelfile:0,
+				  type:"",//yinpin:仅上传音频文件,shipin:仅上传视频文件,img:仅上传图片,不填或all表示全部
+				  input_id:"photos5",//存多张图片路径的input的id
+				  weizhi_id:"photos5_weizhi",//选择按钮位置对像id
+				  panel_id:"photos5_panel",//图片文件显示对象id
+				  input_fengmian_id:'',//存封面的图片路径input对象id
+				  bgsrc:"",//按钮图片
+				  yasuo:{type:"w",width:800},//压缩配置
+				  img_fdsize:1024*50,//每段图片的大小，最好不要超过1M
+				  ischongxuan:1,//1显示重选按钮
+				  nullstr:"",//空时提示的信息
+				  drop_to_id:"drop_div",//托入有效区域对象id,如填写成document则将整个网页做为有效区域
+				  send_id:"send",//按钮位置对像id,不填写或填写auto则自动上传
+				  item_class:"myitem", //可以不填写，不填写为显示图片
+				  select_num_id:"select_num", //可以不填写，显示当前要上传的文件个数的对象id
+				  success_num_id:"success_num", //可以不填写，显示当前要已上传的文件总个数的对象id
+				  down_url:"",//可以不填写，下载的
+				  init_show:{date:0,size:0,img:1,name:0,bar:1,baifenbi:1,del:0,bg:1,fengmian:0,see:0,chongchuan:0,chongxuan:0,canvas:0,prev:0,next:0,filesize:0},//初始过程要显示的元素
+				  upload_show:{date:0,size:0,name:1,bar:1,baifenbi:1},//上传过程中要显示的元素,1:显示,0不显示 date(日期) size(大小) name(标题) bar(进度条) baifenbi(进度条) del(删除按钮)
+				  success_show:{date:1,size:1,name:1,bar:0,baifenbi:0,del:1}//上传完后要显示的元素,1:显示,0不显	  
+		 });
+</script>
+</script>
+</body>
+</html>

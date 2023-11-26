@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站信息配置</title>
+<link href="templates/style/admin.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="templates/js/jquery.min.js"></script>
+<script type="text/javascript" src="plugin/colorpicker/colorpicker.js"></script>
+<script type="text/javascript">
+function tabs(tabobj, obj)
+{
+	$("#"+tabobj+" li[id^="+tabobj+"]").each(function(i){
+		if(tabobj+"_title"+i == obj.id)
+		{
+			$("#"+tabobj+"_title"+i).attr("class","on");
+			$("#"+tabobj+"_content"+i).show();
+		}
+		else
+		{
+			$("#"+tabobj+"_title"+i).attr("class","");
+			$("#"+tabobj+"_content"+i).hide();
+		}
+	});
+}
+
+function UserThisLoginBg(str)
+{
+	if(str == ""){
+		$("#cfg_loginbgimg").val("");
+		$("#loginbgimg_prew").attr("src","templates/images/nologinbg.jpg");
+	}else{
+		$("#cfg_loginbgimg").val(str);
+		$("#loginbgimg_prew").attr("src",str);
+	}
+}
+
+function DelThisLoginBg(str)
+{
+	$.ajax({
+		url : "ajax_do.php?action=delloginbg&delloginbg="+str,
+		type: 'get',
+		dataType:'html',
+		beforeSend:function(){},
+		success:function(data){
+			if(data){
+				$("div[rel='"+str+"']").remove();
+			}
+		}
+	});
+}
+</script>
+</head>
+<body>
+<div class="topToolbar"> <span class="title">网站信息配置</span> <a href="javascript:location.reload();" class="reload">刷新</a></div>
+<!--cfg_var-->
+<form name="form_cfg_var" method="post" action="">
+<input type="hidden" name="ewmjiexiurl" id="ewmjiexiurl" value="../ewmimages/" class="input" />
+<input type="hidden" name="cfg_webname" id="cfg_webname" value="管理系统" />
+<input type="hidden" name="cfg_webswitch" id="cfg_webswitch" value="Y" />
+<div class="" id="tabs_content0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formTable" >
+									<tr >
+				<td width="25%" height="40" align="right">二维码系统路径：</td>
+				<td width="40%"><input type="text" name="ewmadminurl" id="ewmadminurl" value="<?php echo $ewmadminurl ?>" class="input" /></td>
+				<td width="35%"><span class="siteSetTag">二维码系统路径 可以修改一个不容易猜透的目录,如果修改此处需要在修改其他2个地方,1.修改实际二维码文件夹名称 2.修改/ldpay/config.php 代码 include_once '../ewmadmin/inc/login.inc.php'; ewmadmin改成你修改的文件夹目录名</span></td>
+			</tr>
+													<tr >
+													  <td height="40" align="right">前端支付页面：</td>
+													  <td><input type="radio" name="ldpayoff" id="ldpayoff" value="0" <?php if($ldpayoff == 0) echo 'checked=checked '; ?> />开启前端 &nbsp;<input type="radio" name="ldpayoff" id="ldpayoff" value="1"  <?php if($ldpayoff == 1) echo 'checked=checked '; ?>/> 关闭前端</td>
+													  <td><span class="siteSetTag">在操作二维码系统时（本系统所有功能）,需要配置系统功能设置 → 关闭前端支付页面 → 选择关闭（关闭后等待5分钟后在操作二维码系统,选择无人支付的时间段）,否则由于操作会造成客户支付后无法正常返回.</span></td>
+		  </tr>
+													<tr >
+				<td width="25%" height="40" align="right">是否是多账号版本：</td>
+				<td width="40%"><input type="radio" name="accounttype" id="accounttype" value="1" <?php if($accounttype == 1) echo 'checked=checked '; ?> />是 &nbsp;<input type="radio" name="accounttype" id="accounttype" value="0"  <?php if($accounttype == 0) echo 'checked=checked '; ?>/> 否</td>
+				<td width="35%"><span class="siteSetTag">是否是多账号版本 如果多个账号同时收款选择是</span></td>
+			</tr>
+										<tr >
+				<td width="25%" height="40" align="right">收款金额方式：</td>
+				<td width="40%"><input type="radio" name="renyitype" id="renyitype" value="0" <?php if($renyitype == 0) echo 'checked=checked '; ?> /> 固定金额模式 &nbsp;<input type="radio" name="renyitype" id="renyitype" value="1"  <?php if($renyitype == 1) echo 'checked=checked '; ?>/> 
+				任意金额模式</td>
+				<td width="35%"><span class="siteSetTag">固定金额调用对应金额二维码系统的二维码图片，任意金额调用任意金额的一张二维码，任意金额客户扫码后需要客户输入提示金额进行支付，如果金额输入错误会不能正常返回.</span></td>
+			</tr>
+							<tr >
+				<td width="25%" height="40" align="right">KEY秘钥方式：</td>
+				<td width="40%"><input type="radio" name="keytype" id="keytype" value="0" <?php if($keytype == 0) echo 'checked=checked '; ?> /> 基本 &nbsp;<input type="radio" name="keytype" id="keytype" value="1"  <?php if($keytype == 1) echo 'checked=checked '; ?> /> MD5</td>
+				<td width="35%"><span class="siteSetTag">加密方式,可以根据自己情况选择.</span></td>
+			</tr>
+										<tr >
+				<td width="25%" height="40" align="right">协议方式：</td>
+				<td width="40%"><input type="radio" name="httptype" id="httptype" value="0"  <?php if($httptype == 0) echo 'checked=checked '; ?> /> Http &nbsp;<input type="radio" name="httptype" id="httptype" value="1" <?php if($httptype == 1) echo 'checked=checked '; ?> /> Https</td>
+				<td width="35%"><span class="siteSetTag">协议方式,一般情况请选择默认配置.</span></td>
+			</tr>
+				                        <tr >
+				                          <td width="25%" height="40" align="right">支付成功后是否显示成功提示框：</td>
+				<td width="40%"><input type="radio" name="payok2018type" id="payok2018type" value="0" <?php if($payok2018type == 0) echo 'checked=checked '; ?> />显示 &nbsp;<input type="radio" name="payok2018type" id="payok2018type" value="1"  <?php if($payok2018type == 1) echo 'checked=checked '; ?>/> 不显示</td>
+				<td width="35%"><span class="siteSetTag">在二维码扫码页面当客户扫码支付成功后，返回跳转页面时是否显示付款成功提示框.</span></td>
+          </tr>
+                <tr >
+				<td width="25%" height="40" align="right">解析二维码方式：</td>
+				<td width="40%"><input type="radio" name="ewmjiexi" id="ewmjiexi" value="0" <?php if($ewmjiexi == 0) echo 'checked=checked '; ?> /> 本地解析 &nbsp;<input type="radio" name="ewmjiexi" id="ewmjiexi" value="1" <?php if($ewmjiexi == 1) echo 'checked=checked '; ?> /> 远程解析 &nbsp;</td>
+				<td width="35%"><span class="siteSetTag">解析二维码图片 本地解析 远程解析 如果上传二维码出现页面空白不能正常上传，可以试着改成 远程解析 一般选择本地解析</span></td>
+			</tr>
+							
+				<tr >
+				<td width="25%" height="40" align="right">是否使用手动解析支付宝二维码地址：</td>
+				<td width="40%"><input type="radio" name="aliewmok" id="aliewmok" value="0" <?php if($aliewmok == 0) echo 'checked=checked '; ?>/> 不使用 &nbsp;<input type="radio" name="aliewmok" id="aliewmok" value="1"  <?php if($aliewmok == 1) echo 'checked=checked '; ?> /> 使用</td>
+				<td width="35%"><span class="siteSetTag">一般不需要修改 只有在添加上传支付宝二维码图片时 选择远程或本地解析都不能成功的情况下 使用手动解析</span></td>
+			</tr>
+										
+				<tr >
+				  <td height="40" align="right">是否开启微信QQ二维码解析：</td>
+				  <td><input type="radio" name="wxqqewmok" id="wxqqewmok" value="0" <?php if($wxqqewmok == 0) echo 'checked=checked '; ?>/> 不使用 &nbsp;<input type="radio" name="wxqqewmok" id="wxqqewmok" value="1"  <?php if($wxqqewmok == 1) echo 'checked=checked '; ?> /> 使用</td>
+				  <td><span class="siteSetTag">请使用默认选项，一般选择不使用，此功能为解析微信及QQ二维码，如果选择使用会影响上传二维码速度</span></td>
+		  </tr>
+				<tr >
+				  <td height="40" align="right">本地解析二维码类型：</td>
+				  <td><input type="radio" name="bdewmtype" id="bdewmtype" value="1" <?php if($bdewmtype == 1) echo 'checked=checked'; ?> /> 方式1 &nbsp;<input type="radio" name="bdewmtype" id="bdewmtype" value="2"  <?php if($bdewmtype == 2) echo 'checked=checked '; ?> /> 方式2 &nbsp;</td>
+				  <td><span class="siteSetTag">一般选择方式1 方式1二维码不做解析 方式2通过本地系统或远程进行对二维码图片做解析（一般在使用支付宝方式时选取方式2）</span></td>
+		  </tr>
+				<tr >
+				<td width="25%" height="40" align="right">二维码系统 POST提交方式：</td>
+				<td width="40%"><input type="radio" name="ewmposttype" id="ewmposttype" value="1" <?php if($ewmposttype == 1) echo 'checked=checked'; ?> /> 方式1 &nbsp;<input type="radio" name="ewmposttype" id="ewmposttype" value="2"  <?php if($ewmposttype == 2) echo 'checked=checked '; ?> /> 方式2 &nbsp;<input type="radio" name="ewmposttype" id="ewmposttype" value="3"  <?php if($ewmposttype == 3) echo 'checked=checked'; ?> /> 方式3</td>
+				<td width="35%"><span class="siteSetTag">一般选择方式1 二维码系统POST提交方式（参数有三种）：如果设置1方式提交返回值接收文件不能获取到信息  可以把参数设置2 或3</span></td>
+			</tr>
+							<tr >
+				<td width="25%" height="40" align="right">二维码系统显示支付宝：</td>
+				<td width="40%"><input type="radio" name="xianail" id="xianail" value="1"  <?php if($xianail == 1) echo 'checked=checked'; ?> /> 
+				显示 &nbsp;<input type="radio" name="xianail" id="xianail" value="0" <?php if($xianail == 0) echo 'checked=checked'; ?> /> 不显示</td>
+				<td width="35%"><span class="siteSetTag">指的是二维码系统里上传页是否显示支付宝</span></td>
+			</tr>
+										<tr >
+				<td width="25%" height="40" align="right">二维码系统显示QQ钱包：</td>
+				<td width="40%"><input type="radio" name="xiancft" id="xiancft" value="1" <?php if($xiancft == 1) echo 'checked=checked'; ?>/> 
+				显示 &nbsp;<input type="radio" name="xiancft" id="xiancft" value="0" <?php if($xiancft == 0) echo 'checked=checked'; ?> /> 不显示</td>
+				<td width="35%"><span class="siteSetTag">指的是二维码系统里上传页是否显示QQ钱包</span></td>
+			</tr>
+													<tr >
+				<td width="25%" height="40" align="right">二维码系统显示微信：</td>
+				<td width="40%"><input type="radio" name="xianwx" id="xianwx" value="1" <?php if($xianwx == 1) echo 'checked=checked'; ?>/> 
+				显示 &nbsp;<input type="radio" name="xianwx" id="xianwx" value="0" <?php if($xianwx == 0) echo 'checked=checked'; ?> /> 不显示</td>
+				<td width="35%"><span class="siteSetTag">指的是二维码系统里上传页是否显示微信</span></td>
+			</tr>
+			
+		<tr >
+						                              <td height="40" align="right">订单提交限制时间(S)：</td>
+						                              <td><input type="text" name="cfg_ldtimeout" id="cfg_ldtimeout" value="<?php echo $cfg_ldtimeout ?>" class="input" /></td>
+						                              <td><span class="siteSetTag"><font color="#CC0000">限制时间单位：(秒) 0表示不限制,请设置整数 20表示：每20秒允许客户提交一次,根据自己网站情况设置</font></span></td>
+          </tr>
+		  <tr >
+						                              <td height="40" align="right">订单有效时间(S)：</td>
+						                              <td><input type="text" name="cfg_ddtimeout" id="cfg_ddtimeout" value="<?php echo $cfg_ddtimeout ?>" class="input" /></td>
+						                              <td><span class="siteSetTag"><font color="#CC0000">订单有效时间单位：(秒) 300表示5分钟,180表示3分钟,不能低于180，根据自己网站情况设置</font></span></td>
+          </tr>
+                        <tr >
+				<td width="25%" height="40" align="right">MYSQL：</td>
+				<td width="40%"><input type="text" name="cfg_mysql_type" id="cfg_mysql_type" value="<?php echo $cfg_mysql_type ?>" class="input" /></td>
+				<td width="35%"><span class="siteSetTag">数据库类型(支持mysql和mysqli) 请不要随意修改</span></td>
+			</tr>
+			
+			<tr >
+				<td width="25%" height="40" align="right">每页显示记录数：</td>
+				<td width="40%"><input type="text" name="cfg_pagenum" id="cfg_pagenum" value="<?php echo $cfg_pagenum ?>" class="input" /></td>
+				<td width="35%"><span class="siteSetTag"></span></td>
+			</tr>
+						<tr >
+				<td width="25%" height="40" align="right">服务器时区设置：</td>
+				<td width="40%"><input type="text" name="cfg_timezone" id="cfg_timezone" value="<?php echo $cfg_timezone ?>" class="input" /></td>
+				<td width="35%"><span class="siteSetTag"></span></td>
+			</tr>
+						<tr >
+				<td width="25%" height="40" align="right">是否开启错误提示：</td>
+				<td width="40%"><input type="radio" name="cfg_diserror" id="cfg_diserror" value="Y" <?php if($cfg_diserror == "Y") echo 'checked=checked'; ?>/> 
+				是 &nbsp;<input type="radio" name="cfg_diserror" id="cfg_diserror" value="N" <?php if($cfg_diserror == "N") echo 'checked=checked'; ?> /> 否</td>
+				<td width="35%"><span class="siteSetTag">调试时选择是，运营选择否</span></td>
+			</tr>
+			<tr class="nb">
+				<td colspan="3"><div class="formSubBtn">
+					<input type="submit" class="submit" value="提交" />
+					<input type="button" class="back" value="返回" onclick="history.go(-1);" />
+					<input type="hidden" name="action" id="action" value="update" />
+				</div></td>
+			</tr>
+		</table>
+  </div>
+
+</form>
+</body>
+</html>

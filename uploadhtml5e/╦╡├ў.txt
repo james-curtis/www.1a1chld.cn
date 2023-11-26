@@ -1,0 +1,10 @@
+include/asp/ajax.asp 生成小图并返回小图路径
+include/asp/ajax_file.asp不生成小图
+iis默认最大是200KB，如要上传大文件则需要配置一下iis允许最大值,百度
+
+
+http://shanghaisx.d88.1stxy.cn/Inde.asp?action=1、
+
+
+
+.net 上传会有session丢失问题，请将Global.asax放到根目录下

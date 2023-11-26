@@ -1,0 +1,33 @@
+系统使用说明
+
+一、平台需求
+1.Windows 平台：
+IIS/Apache/Nginx + PHP5.2+/PHP5.3+ + MySQL4/5
+
+2.Linux/Unix 平台
+Apache + PHP5 + MySQL5 (PHP必须在非安全模式下运行)
+
+
+curl()是php扩展需要开启
+
+3.PHP环境容易碰到的不兼容性问题
+  (1)data目录没写入权限，导致系统session无法使用，这将导致无法登录管理后台；
+  (2)php的上传的临时文件夹没设置好或没写入权限，这会导致文件上传的功能无法使用；
+
+明文admin888密码加密 0b77520f93de693bdab0060746e38165
+
+
+二维码数据库默认编码 utf8，新建数据库时选择utf8
+
+宝塔 php5.3  mysql5.5
+
+数据库采用utf8
+utf8 -- UTF-8 Unicode
+
+utf8_general_ci
+
+如果数据库采用gb2132编码不能正常登陆或安装二维码请修改文件inc\config.php 文件$db_charset = 'utf8';
+改成$db_charset = 'gb2132'; 或$db_charset = 'gbk';测试
+
+gb2312 -- GB2312 Simplified Chinese
+gb2312_chinese_ci
